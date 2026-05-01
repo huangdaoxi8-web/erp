@@ -3,7 +3,7 @@
 import { Sidebar } from '@/components/sidebar';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { FileText, Package, Clock, CheckCircle2, TrendingUp } from 'lucide-react';
+import { FileText, Package, Clock, CheckCircle2, TrendingUp, RotateCcw } from 'lucide-react';
 
 const stats = [
   {
@@ -21,6 +21,14 @@ const stats = [
     icon: Package,
     color: 'text-blue-500',
     bgColor: 'bg-blue-500/10',
+  },
+  {
+    title: '退回订单',
+    value: '2',
+    description: '查看明细',
+    icon: RotateCcw,
+    color: 'text-red-500',
+    bgColor: 'bg-red-500/10',
   },
   {
     title: '生产中订单',
@@ -78,7 +86,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Stats Cards */}
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-5">
             {stats.map((stat) => (
               <Card key={stat.title} className="overflow-hidden">
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
