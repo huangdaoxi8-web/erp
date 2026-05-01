@@ -15,20 +15,20 @@ const stats = [
     bgColor: 'bg-orange-500/10',
   },
   {
-    title: '未排产订单池',
-    value: '10',
-    description: '查看明细',
-    icon: Package,
-    color: 'text-blue-500',
-    bgColor: 'bg-blue-500/10',
-  },
-  {
     title: '退回订单',
     value: '2',
     description: '查看明细',
     icon: RotateCcw,
     color: 'text-red-500',
     bgColor: 'bg-red-500/10',
+  },
+  {
+    title: '未排产订单池',
+    value: '10',
+    description: '查看明细',
+    icon: Package,
+    color: 'text-blue-500',
+    bgColor: 'bg-blue-500/10',
   },
   {
     title: '生产中订单',
