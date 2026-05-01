@@ -196,7 +196,7 @@ export default function RegisterPage() {
           </Link>
           <div className="space-y-2">
             <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-[#0A82DF] via-white to-[#0A82DF] bg-clip-text text-transparent animate-pulse">
-              手机号注册
+              注册账号
             </h1>
             <p className="text-[#91CD30] flex items-center justify-center gap-2">
               <Zap className="h-4 w-4" />
