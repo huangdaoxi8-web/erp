@@ -34,8 +34,8 @@ export function Sidebar() {
       {/* Logo */}
       <div className="p-4 border-b border-sidebar-border">
         <div>
-          <h2 className="font-semibold text-sm">青崖管理系统</h2>
-          <p className="text-xs text-muted-foreground">管理员：daoxi</p>
+          <h2 className="font-semibold text-lg">青崖管理系统</h2>
+          <p className="text-sm text-muted-foreground">管理员：daoxi</p>
         </div>
       </div>
 
