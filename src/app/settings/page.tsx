@@ -38,11 +38,11 @@ export default function SettingsPage() {
                   <div className="grid gap-4 md:grid-cols-2">
                     <div className="space-y-2">
                       <Label>系统名称</Label>
-                      <Input defaultValue="某某生产管理系统" />
+                      <Input defaultValue="青崖管理系统" />
                     </div>
                     <div className="space-y-2">
                       <Label>公司名称</Label>
-                      <Input defaultValue="某某木业有限公司" />
+                      <Input defaultValue="温州青崖信息科技有限公司" />
                     </div>
                     <div className="space-y-2">
                       <Label>联系电话</Label>

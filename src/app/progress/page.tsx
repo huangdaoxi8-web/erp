@@ -8,10 +8,10 @@ import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
 
 const progressData = [
-  { id: 'P001', order: '某某家园1-2-2004', total: 100, completed: 75, status: '生产中' },
-  { id: 'P002', order: '某某家园1-2-2005', total: 100, completed: 45, status: '生产中' },
-  { id: 'P003', order: '某某家园1-2-201', total: 100, completed: 100, status: '已完成' },
-  { id: 'P004', order: '某某家园1-2-202', total: 100, completed: 20, status: '刚启动' },
+  { id: 'P001', order: '青崖项目1-2-2004', total: 100, completed: 75, status: '生产中' },
+  { id: 'P002', order: '青崖项目1-2-2005', total: 100, completed: 45, status: '生产中' },
+  { id: 'P003', order: '青崖项目1-2-201', total: 100, completed: 100, status: '已完成' },
+  { id: 'P004', order: '青崖项目1-2-202', total: 100, completed: 20, status: '刚启动' },
 ];
 
 const statusColors: Record<string, string> = {

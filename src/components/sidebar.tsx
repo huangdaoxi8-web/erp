@@ -38,7 +38,7 @@ export function Sidebar() {
             <Factory className="h-6 w-6 text-primary" />
           </div>
           <div>
-            <h2 className="font-semibold text-sm">某某生产管理系统</h2>
+            <h2 className="font-semibold text-sm">青崖管理系统</h2>
             <p className="text-xs text-muted-foreground">管理员：daoxi</p>
           </div>
         </div>

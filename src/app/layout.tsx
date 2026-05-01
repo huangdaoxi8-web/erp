@@ -4,12 +4,12 @@ import './globals.css';
 
 export const metadata: Metadata = {
   title: {
-    default: '某某生产管理系统',
-    template: '%s | 某某生产管理系统',
+    default: '青崖管理系统',
+    template: '%s | 青崖管理系统',
   },
   description: 'ERP生产管理系统 - 智能制造 · 高效管理',
   keywords: ['ERP', '生产管理', '订单管理', '智能制造'],
-  authors: [{ name: '某某木业有限公司' }],
+  authors: [{ name: '温州青崖信息科技有限公司' }],
   generator: 'Coze Code',
   robots: {
     index: true,

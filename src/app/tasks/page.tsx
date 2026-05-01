@@ -16,10 +16,10 @@ const taskStats = [
 ];
 
 const tasks = [
-  { id: 'T001', order: '某某家园1-2-2004', task: '柜体生产', assignee: '张三', deadline: '2024-10-25', status: '进行中' },
-  { id: 'T002', order: '某某家园1-2-2005', task: '门板加工', assignee: '李四', deadline: '2024-10-26', status: '待分配' },
-  { id: 'T003', order: '某某家园1-2-201', task: '五金安装', assignee: '王五', deadline: '2024-10-24', status: '已完成' },
-  { id: 'T004', order: '某某家园1-2-202', task: '表面处理', assignee: '赵六', deadline: '2024-10-23', status: '逾期' },
+  { id: 'T001', order: '青崖项目1-2-2004', task: '柜体生产', assignee: '张三', deadline: '2024-10-25', status: '进行中' },
+  { id: 'T002', order: '青崖项目1-2-2005', task: '门板加工', assignee: '李四', deadline: '2024-10-26', status: '待分配' },
+  { id: 'T003', order: '青崖项目1-2-201', task: '五金安装', assignee: '王五', deadline: '2024-10-24', status: '已完成' },
+  { id: 'T004', order: '青崖项目1-2-202', task: '表面处理', assignee: '赵六', deadline: '2024-10-23', status: '逾期' },
 ];
 
 const statusColors: Record<string, string> = {

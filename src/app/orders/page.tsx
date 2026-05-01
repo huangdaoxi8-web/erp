@@ -10,26 +10,26 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const pendingOrders = [
-  { id: '1', dealer: '某某某全屋定制', order: '某某家园1-2-2004', date: '2022-10-15 14:14' },
+  { id: '1', dealer: '青崖客户', order: '青崖项目1-2-2004', date: '2022-10-15 14:14' },
 ];
 
 const returnedOrders = [
-  { id: '1', dealer: '某某某全屋定制', order: '某某家园1-2-2004', orderDate: '2022-10-15 14:14', returnDate: '2022-10-20 9:20', handler: '账号3名称' },
+  { id: '1', dealer: '青崖客户', order: '青崖项目1-2-2004', orderDate: '2022-10-15 14:14', returnDate: '2022-10-20 9:20', handler: '账号3名称' },
 ];
 
 const receivedOrders = [
-  { id: '1', dealer: '某某某全屋定制', order: '某某家园1-2-2004', date: '2022-10-15 14:14', checker: '账号2名称' },
-  { id: '2', dealer: '某某某全屋定制', order: '某某家园1-2-2005', date: '2022-10-16 14:14', checker: '账号1名称' },
-  { id: '3', dealer: '某某某全屋定制', order: '某某家园1-2-201', date: '2022-10-17 15:17', checker: '账号2名称' },
+  { id: '1', dealer: '青崖客户', order: '青崖项目1-2-2004', date: '2022-10-15 14:14', checker: '账号2名称' },
+  { id: '2', dealer: '青崖客户', order: '青崖项目1-2-2005', date: '2022-10-16 14:14', checker: '账号1名称' },
+  { id: '3', dealer: '青崖客户', order: '青崖项目1-2-201', date: '2022-10-17 15:17', checker: '账号2名称' },
 ];
 
 const poolOrders = [
-  { id: '20221019009', dealer: '某某某全屋定制', order: '某某家园1-2-2004', date: '2022-10-15 14:14', checker: '账号2名称',录入员: '账号1名称，账号4名称' },
-  { id: '20221019008', dealer: '某某某全屋定制', order: '某某家园1-2-2005', date: '2022-10-16 14:14', checker: '账号1名称',录入员: '账号3名称' },
-  { id: '20221019004', dealer: '某某某全屋定制', order: '某某家园1-2-201', date: '2022-10-17 15:17', checker: '账号2名称',录入员: '账号4名称' },
-  { id: '20221019003', dealer: '某某某全屋定制', order: '某某家园1-2-201', date: '2022-10-19 9:11', checker: '账号4名称',录入员: '账号2名称' },
-  { id: '20221019002', dealer: '某某某全屋定制', order: '某某家园1-2-201', date: '2022-10-20 8:33', checker: '账号1名称',录入员: '账号1名称' },
-  { id: '20221019001', dealer: '某某某全屋定制', order: '某某家园1-2-201', date: '2022-10-20 13:17', checker: '账号3名称',录入员: '账号2名称' },
+  { id: '20221019009', dealer: '青崖客户', order: '青崖项目1-2-2004', date: '2022-10-15 14:14', checker: '账号2名称',录入员: '账号1名称，账号4名称' },
+  { id: '20221019008', dealer: '青崖客户', order: '青崖项目1-2-2005', date: '2022-10-16 14:14', checker: '账号1名称',录入员: '账号3名称' },
+  { id: '20221019004', dealer: '青崖客户', order: '青崖项目1-2-201', date: '2022-10-17 15:17', checker: '账号2名称',录入员: '账号4名称' },
+  { id: '20221019003', dealer: '青崖客户', order: '青崖项目1-2-201', date: '2022-10-19 9:11', checker: '账号4名称',录入员: '账号2名称' },
+  { id: '20221019002', dealer: '青崖客户', order: '青崖项目1-2-201', date: '2022-10-20 8:33', checker: '账号1名称',录入员: '账号1名称' },
+  { id: '20221019001', dealer: '青崖客户', order: '青崖项目1-2-201', date: '2022-10-20 13:17', checker: '账号3名称',录入员: '账号2名称' },
 ];
 
 export default function OrdersPage() {

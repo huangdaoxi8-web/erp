@@ -7,9 +7,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
 const shippingData = [
-  { id: 'S001', order: '某某家园1-2-2004', dealer: '某某某全屋定制', quantity: 50, shipDate: '2024-10-28', status: '待发货', tracking: '-' },
-  { id: 'S002', order: '某某家园1-2-2003', dealer: '某某某全屋定制', quantity: 30, shipDate: '2024-10-25', status: '已发货', tracking: 'SF1234567890' },
-  { id: 'S003', order: '某某家园1-2-2002', dealer: '某某某全屋定制', quantity: 45, shipDate: '2024-10-20', status: '已签收', tracking: 'YT9876543210' },
+  { id: 'S001', order: '青崖项目1-2-2004', dealer: '青崖客户', quantity: 50, shipDate: '2024-10-28', status: '待发货', tracking: '-' },
+  { id: 'S002', order: '青崖项目1-2-2003', dealer: '青崖客户', quantity: 30, shipDate: '2024-10-25', status: '已发货', tracking: 'SF1234567890' },
+  { id: 'S003', order: '青崖项目1-2-2002', dealer: '青崖客户', quantity: 45, shipDate: '2024-10-20', status: '已签收', tracking: 'YT9876543210' },
 ];
 
 const statusColors: Record<string, string> = {
