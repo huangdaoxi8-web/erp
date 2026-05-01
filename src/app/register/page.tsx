@@ -146,10 +146,31 @@ export default function RegisterPage() {
     }
 
     setCodeSending(true);
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    setCodeSending(false);
-    setCodeSent(true);
-    setCountdown(60);
+    try {
+      const res = await fetch('/api/auth/sms/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone: formData.phone }),
+      });
+      const data = await res.json();
+      
+      if (data.success) {
+        setCodeSent(true);
+        setCountdown(60);
+        // 开发模式下显示验证码
+        if (data.dev_code) {
+          alert(`【开发模式】验证码: ${data.dev_code}`);
+        } else {
+          alert('验证码已发送，请注意查收');
+        }
+      } else {
+        alert(data.error || '发送失败');
+      }
+    } catch {
+      alert('网络错误，请重试');
+    } finally {
+      setCodeSending(false);
+    }
   };
 
   const handleRegister = async (e: React.FormEvent) => {
@@ -176,8 +197,43 @@ export default function RegisterPage() {
     }
 
     setLoading(true);
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    router.push('/login');
+    try {
+      // 验证验证码
+      const verifyRes = await fetch('/api/auth/sms/verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone: formData.phone, code: formData.code }),
+      });
+      const verifyData = await verifyRes.json();
+      
+      if (!verifyData.success) {
+        alert(verifyData.error || '验证码错误');
+        setLoading(false);
+        return;
+      }
+
+      // 注册用户
+      const regRes = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          phone: formData.phone,
+          password: formData.password,
+        }),
+      });
+      const regData = await regRes.json();
+      
+      if (regData.success) {
+        alert('注册成功！');
+        router.push('/login');
+      } else {
+        alert(regData.error || '注册失败');
+      }
+    } catch {
+      alert('网络错误，请重试');
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (!mounted) return null;
