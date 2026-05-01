@@ -10,6 +10,7 @@ import {
   CheckSquare, 
   TrendingUp, 
   Truck, 
+  DollarSign,
   BarChart3,
   Settings,
   LogOut
@@ -23,6 +24,7 @@ const navigation = [
   { name: '任务分配', href: '/tasks', icon: CheckSquare },
   { name: '进度管理', href: '/progress', icon: TrendingUp },
   { name: '发货管理', href: '/shipping', icon: Truck },
+  { name: '财务管理', href: '/finance', icon: DollarSign },
   { name: '数字看板', href: '/board', icon: BarChart3 },
 ];
 
