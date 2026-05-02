@@ -55,8 +55,10 @@ export function Sidebar() {
       } catch (e) {
         console.error('解析用户信息失败', e);
       }
+    } else {
+      setUserInfo(null);
     }
-  }, []);
+  }, [pathname]);
 
   const displayName = userInfo?.nickname || userInfo?.phone || '未登录';
 

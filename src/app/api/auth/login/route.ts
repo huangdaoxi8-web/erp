@@ -58,15 +58,15 @@ export async function POST(request: Request) {
       created_at: user.created_at,
     };
 
-    // 设置Cookie
+    // 设置Cookie（用于API认证）
     const response = NextResponse.json({
       success: true,
       user: userInfo,
     });
 
     response.cookies.set('erp_user', JSON.stringify(userInfo), {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      httpOnly: false, // 前端需要读取，所以不能设为true
+      secure: true, // 云端使用 HTTPS
       sameSite: 'lax',
       maxAge: 60 * 60 * 24 * 7,
       path: '/',
