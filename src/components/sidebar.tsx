@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { 
@@ -28,8 +29,36 @@ const navigation = [
   { name: '数字看板', href: '/board', icon: BarChart3 },
 ];
 
+interface UserInfo {
+  id: string;
+  phone: string;
+  nickname?: string;
+  role: string;
+}
+
 export function Sidebar() {
   const pathname = usePathname();
+  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
+
+  useEffect(() => {
+    // 从 Cookie 中读取用户信息
+    const cookies = document.cookie.split(';').reduce((acc, cookie) => {
+      const [key, value] = cookie.trim().split('=');
+      acc[key] = decodeURIComponent(value || '');
+      return acc;
+    }, {} as Record<string, string>);
+    
+    if (cookies['erp_user']) {
+      try {
+        const user = JSON.parse(cookies['erp_user']);
+        setUserInfo(user);
+      } catch (e) {
+        console.error('解析用户信息失败', e);
+      }
+    }
+  }, []);
+
+  const displayName = userInfo?.nickname || userInfo?.phone || '未登录';
 
   return (
     <div className="flex flex-col w-64 bg-sidebar border-r border-sidebar-border h-screen">
@@ -37,7 +66,7 @@ export function Sidebar() {
       <div className="p-4 border-b border-sidebar-border">
         <div>
           <h2 className="font-semibold text-lg">青崖管理系统</h2>
-          <p className="text-sm text-muted-foreground">管理员：daoxi</p>
+          <p className="text-sm text-muted-foreground">管理员：{displayName}</p>
         </div>
       </div>
 

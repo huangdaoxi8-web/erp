@@ -7,7 +7,7 @@ const getClient = () => getSupabaseClient();
 // 获取当前登录用户
 async function getCurrentUser() {
   const cookieStore = await cookies();
-  const userStr = cookieStore.get('current_user')?.value;
+  const userStr = cookieStore.get('erp_user')?.value;
   if (!userStr) return null;
   try {
     return JSON.parse(userStr);

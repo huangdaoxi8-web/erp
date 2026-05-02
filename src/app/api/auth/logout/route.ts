@@ -3,7 +3,7 @@ import { cookies } from 'next/headers';
 export async function POST() {
   try {
     const cookieStore = await cookies();
-    cookieStore.delete('current_user');
+    cookieStore.delete('erp_user');
 
     return Response.json({ success: true, message: '已退出登录' });
   } catch (err) {

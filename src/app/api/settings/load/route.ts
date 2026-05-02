@@ -6,7 +6,7 @@ export async function GET(request: NextRequest) {
     const supabase = getSupabaseClient();
     
     // 获取当前用户
-    const userCookie = request.cookies.get('current_user');
+    const userCookie = request.cookies.get('erp_user');
     if (!userCookie) {
       return NextResponse.json(
         { success: false, error: '请先登录' },

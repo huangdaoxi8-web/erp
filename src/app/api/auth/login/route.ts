@@ -64,7 +64,7 @@ export async function POST(request: Request) {
       user: userInfo,
     });
 
-    response.cookies.set('user', JSON.stringify(userInfo), {
+    response.cookies.set('erp_user', JSON.stringify(userInfo), {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
