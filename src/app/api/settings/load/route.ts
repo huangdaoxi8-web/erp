@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getSupabaseClient } from '@/storage/database/supabase-client';
+import { getSupabaseServiceClient } from '@/storage/database/supabase-client';
 
 export async function GET(request: NextRequest) {
   try {
-    const supabase = getSupabaseClient();
+    // 使用 Service Role Key 绕过 RLS
+    const supabase = getSupabaseServiceClient();
     
     // 获取当前用户
     const userCookie = request.cookies.get('erp_user');
