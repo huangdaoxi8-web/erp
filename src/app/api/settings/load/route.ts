@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSupabaseServiceClient } from '@/storage/database/supabase-client';
+import { isUserAdmin } from '@/lib/auth-utils';
 
 export async function GET(request: NextRequest) {
   try {
@@ -16,8 +17,12 @@ export async function GET(request: NextRequest) {
     
     const user = JSON.parse(userCookie.value);
     
-    // 非超级管理员只能查看自己的前缀配置
-    if (user.role !== 'super_admin') {
+    // 使用统一的权限检查函数
+    // 规则：超级管理员、生产商租户用户、订单管理角色 都视为管理员
+    const isAdmin = isUserAdmin(user);
+    
+    // 非管理员只能查看自己的前缀配置
+    if (!isAdmin) {
       // 从user_settings表获取用户自己的设置
       const { data, error } = await supabase
         .from('user_settings')
@@ -42,7 +47,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ 
         success: true, 
         settings,
-        isAdmin: false
+        isAdmin: isAdmin
       });
     }
     

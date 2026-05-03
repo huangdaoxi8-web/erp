@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSupabaseServiceClient } from '@/storage/database/supabase-client';
+import { isUserAdmin } from '@/lib/auth-utils';
 
 export async function GET(request: NextRequest) {
   try {
@@ -69,8 +70,8 @@ export async function POST(request: NextRequest) {
     
     const user = JSON.parse(userCookie.value);
     
-    // 仅限超级管理员
-    if (user.role !== 'super_admin') {
+    // 使用统一的权限检查函数
+    if (!isUserAdmin(user)) {
       return NextResponse.json(
         { success: false, error: '只有管理员才能设置订单前缀' },
         { status: 403 }
@@ -163,7 +164,7 @@ export async function DELETE(request: NextRequest) {
     
     const user = JSON.parse(userCookie.value);
     
-    if (user.role !== 'super_admin') {
+    if (!isUserAdmin(user)) {
       return NextResponse.json(
         { success: false, error: '只有管理员才能删除订单前缀' },
         { status: 403 }
