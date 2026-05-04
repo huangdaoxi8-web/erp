@@ -52,59 +52,29 @@ export default function SettingsPage() {
   
   // 生产商岗位角色列表（20个核心岗位）
   const MANUFACTURER_ROLES = [
-    { value: '厂长/车间主任', label: '1 厂长/车间主任', dept: '管理层' },
-    { value: '订单管理', label: '2 订单管理', dept: '技术/计划' },
-    { value: '拆单员', label: '3 拆单员', dept: '技术/计划' },
-    { value: 'PMC排产', label: '4 PMC排产', dept: '技术/计划' },
-    { value: '调色师', label: '5 调色师', dept: '技术/计划' },
-    { value: '开料工', label: '6 开料工', dept: '加工段' },
-    { value: '封边工', label: '7 封边工', dept: '加工段' },
-    { value: '排钻/打孔工', label: '8 排钻/打孔工', dept: '加工段' },
-    { value: '打磨/抛光工', label: '9 打磨/抛光工', dept: '涂装段' },
-    { value: '贴皮工', label: '10 贴皮工', dept: '涂装段' },
-    { value: '喷漆工', label: '11 喷漆工', dept: '涂装段' },
-    { value: '质检员', label: '12 质检员', dept: '质量/仓储' },
-    { value: '仓库管理员', label: '13 仓库管理员', dept: '质量/仓储' },
-    { value: '物料员', label: '14 物料员', dept: '质量/仓储' },
-    { value: '打包发货', label: '15 打包发货', dept: '交付/后勤' },
-    { value: '售后客服', label: '16 售后客服', dept: '交付/后勤' },
-    { value: '财务', label: '17 财务', dept: '交付/后勤' },
-    { value: '行政', label: '18 行政', dept: '交付/后勤' },
-    { value: '销售', label: '19 销售', dept: '交付/后勤' },
-    { value: '普工', label: '20 普工', dept: '交付/后勤' },
   ];
   
   // 经销商岗位角色
   const DEALER_ROLES = [
-    { value: '总经理', label: '1 总经理', dept: '管理' },
-    { value: '店长', label: '2 店长', dept: '管理' },
-    { value: '财务', label: '3 财务', dept: '财务' },
-    { value: '行政', label: '4 行政', dept: '行政' },
+    { value: '订单管理', label: '1 订单管理', dept: '管理' },
+    { value: '木工', label: '2 木工', dept: '生产' },
+    { value: '打磨', label: '3 打磨', dept: '生产' },
+    { value: '贴皮', label: '4 贴皮', dept: '生产' },
+    { value: '喷漆', label: '5 喷漆', dept: '生产' },
+    { value: '质检', label: '6 质检', dept: '生产' },
+    { value: '打包', label: '7 打包', dept: '生产' },
+    { value: '行政', label: '8 行政', dept: '行政' },
+    { value: '财务', label: '9 财务', dept: '财务' },
+    { value: '销售', label: '10 销售', dept: '销售' },
+    { value: '仓库发货', label: '11 仓库发货', dept: '仓储' },
+    { value: '普通', label: '12 普通', dept: '其他' },
   ];
   
-  // 生产商岗位角色（精简版）
-  const ERP_ROLES = [
-    { value: '订单管理', label: '1 订单管理', dept: '订单管理' },
-    { value: '木工', label: '2 木工', dept: '生产部' },
-    { value: '打磨', label: '3 打磨', dept: '生产部' },
-    { value: '贴皮', label: '4 贴皮', dept: '生产部' },
-    { value: '喷漆', label: '5 喷漆', dept: '生产部' },
-    { value: '质检', label: '6 质检', dept: '生产部' },
-    { value: '打包发货', label: '7 打包发货', dept: '生产部' },
-    { value: '普工', label: '8 普工', dept: '生产部' },
-    { value: '工程监理', label: '9 工程监理', dept: '生产部' },
-    { value: '行政', label: '10 行政', dept: '行政部' },
-    { value: '财务', label: '11 财务', dept: '财务部' },
-    { value: '仓库', label: '12 仓库', dept: '仓储部' },
-    { value: '人事', label: '13 人事', dept: '人事部' },
-  ];
+  // 生产商岗位角色
+  const ERP_ROLES = DEALER_ROLES;
   
   // 材料商岗位角色
-  const MATERIAL_SUPPLIER_ROLES = [
-    { value: '总经理', label: '1 总经理', dept: '管理' },
-    { value: '仓库管理', label: '2 仓库管理', dept: '仓储' },
-    { value: '财务', label: '3 财务', dept: '财务' },
-  ];
+  const MATERIAL_SUPPLIER_ROLES = DEALER_ROLES;
   
   // 加载已有设置
   useEffect(() => {
