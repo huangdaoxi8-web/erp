@@ -2,7 +2,7 @@ import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 
-const supabaseUrl = process.env.COZE_SUPABASE_URL || '';
+const supabaseUrl = process.env.COZE_SUPABASE_URL || 'https://cdcnjtgabgjkouavwxsl.supabase.co';
 const supabaseServiceKey = process.env.COZE_SUPABASE_SERVICE_ROLE_KEY || '';
 
 function getSupabaseAdmin() {
@@ -22,6 +22,7 @@ async function getAuthUser() {
   }
 }
 
+// GET - 获取用户列表
 export async function GET(request: NextRequest) {
   try {
     const user = await getAuthUser();
@@ -34,10 +35,11 @@ export async function GET(request: NextRequest) {
     const tenantId = searchParams.get('tenant_id');
 
     let query = supabase
-      .from('tenant_users')
-      .select('*')
+      .from('users')
+      .select('id, phone, real_name, role, department, is_active, tenant_id, tenant_type, created_at')
       .order('created_at', { ascending: false });
 
+    // 如果指定了租户ID，过滤该租户的用户
     if (tenantId) {
       query = query.eq('tenant_id', tenantId);
     }
@@ -55,79 +57,66 @@ export async function GET(request: NextRequest) {
   }
 }
 
+// POST - 创建新用户（只插入 users 表）
 export async function POST(request: NextRequest) {
   try {
-    const user = await getAuthUser();
-    if (!user) {
+    const currentUser = await getAuthUser();
+    if (!currentUser) {
       return NextResponse.json({ success: false, error: '未登录' }, { status: 401 });
     }
 
     const body = await request.json();
-    const { tenant_id, phone, password, name, role, department } = body;
+    const { phone, password, real_name, role, department } = body;
 
+    // 验证必填字段
     if (!phone || !password) {
       return NextResponse.json({ success: false, error: '手机号和密码必填' }, { status: 400 });
+    }
+
+    // 验证手机号格式
+    if (!/^1\d{10}$/.test(phone)) {
+      return NextResponse.json({ success: false, error: '手机号格式不正确' }, { status: 400 });
     }
 
     const supabase = getSupabaseAdmin();
 
     // 检查手机号是否已存在
-    const { data: existing } = await supabase
-      .from('tenant_users')
-      .select('id')
-      .eq('tenant_id', tenant_id || user.tenant_id)
+    const { data: existingUser } = await supabase
+      .from('users')
+      .select('id, phone')
       .eq('phone', phone)
       .single();
 
-    if (existing) {
+    if (existingUser) {
       return NextResponse.json({ success: false, error: '该手机号已存在' }, { status: 400 });
     }
 
-    // 检查系统用户表
-    const { data: sysUser } = await supabase
-      .from('users')
-      .select('*')
-      .eq('phone', phone)
-      .single();
+    // 从当前登录用户获取 tenant_id 和 tenant_type
+    const tenantId = currentUser.tenant_id;
+    const tenantType = currentUser.tenant_type || 'manufacturer';
 
-    if (sysUser) {
-      // 更新系统用户的租户类型
-      await supabase
-        .from('users')
-        .update({ 
-          tenant_type: user.tenant_type || 'manufacturer',
-          tenant_id: tenant_id || user.tenant_id 
-        })
-        .eq('phone', phone);
-    } else {
-      // 创建系统用户
-      await supabase
-        .from('users')
-        .insert({
-          phone,
-          password,
-          nickname: name || phone,
-          role: 'user',
-          tenant_type: user.tenant_type || 'manufacturer',
-          tenant_id: tenant_id || user.tenant_id,
-        });
+    if (!tenantId) {
+      return NextResponse.json({ success: false, error: '无法获取租户信息' }, { status: 400 });
     }
 
-    // 创建租户用户
+    // 插入到 users 表
     const { data, error } = await supabase
-      .from('tenant_users')
+      .from('users')
       .insert({
-        tenant_id: tenant_id || user.tenant_id,
         phone,
         password,
-        name: name || null,
-        role: role || '普工',
+        real_name: real_name || phone,  // 姓名对应 real_name 字段
+        role: role || 'user',
         department: department || null,
+        tenant_id: tenantId,
+        tenant_type: tenantType,
+        is_active: true,
       })
-      .select()
+      .select('id, phone, real_name, role, department, tenant_id, tenant_type, created_at')
       .single();
 
     if (error) {
+      console.error('创建用户失败:', error);
       return NextResponse.json({ success: false, error: error.message }, { status: 500 });
     }
 
@@ -138,15 +127,16 @@ export async function POST(request: NextRequest) {
   }
 }
 
+// PUT - 更新用户
 export async function PUT(request: NextRequest) {
   try {
-    const user = await getAuthUser();
-    if (!user) {
+    const currentUser = await getAuthUser();
+    if (!currentUser) {
       return NextResponse.json({ success: false, error: '未登录' }, { status: 401 });
     }
 
     const body = await request.json();
-    const { id, name, role, department, status, password } = body;
+    const { id, real_name, role, department, status, password } = body;
 
     if (!id) {
       return NextResponse.json({ success: false, error: '用户ID必填' }, { status: 400 });
@@ -154,46 +144,24 @@ export async function PUT(request: NextRequest) {
 
     const supabase = getSupabaseAdmin();
 
-    // 获取要更新的用户信息
-    const { data: targetUser } = await supabase
-      .from('tenant_users')
-      .select('phone')
-      .eq('id', id)
-      .single();
-
-    if (!targetUser) {
-      return NextResponse.json({ success: false, error: '用户不存在' }, { status: 404 });
-    }
-
-    const updateData: Record<string, string> = {};
-    if (name !== undefined) updateData.name = name;
-    if (role) updateData.role = role;
+    // 构建更新数据
+    const updateData: Record<string, unknown> = {};
+    if (real_name !== undefined) updateData.real_name = real_name;
+    if (role !== undefined) updateData.role = role;
     if (department !== undefined) updateData.department = department;
-    if (status) updateData.status = status;
+    if (status !== undefined) updateData.is_active = status === 'active';
     if (password) updateData.password = password;
-    updateData.updated_at = new Date().toISOString();
 
     const { data, error } = await supabase
-      .from('tenant_users')
+      .from('users')
       .update(updateData)
       .eq('id', id)
-      .select()
+      .select('id, phone, real_name, role, department, is_active, tenant_id, tenant_type')
       .single();
 
     if (error) {
+      console.error('更新用户失败:', error);
       return NextResponse.json({ success: false, error: error.message }, { status: 500 });
-    }
-
-    // 同步更新系统用户表
-    if (name || password) {
-      const sysUpdate: Record<string, string> = {};
-      if (name) sysUpdate.nickname = name;
-      if (password) sysUpdate.password = password;
-      
-      await supabase
-        .from('users')
-        .update(sysUpdate)
-        .eq('phone', targetUser.phone);
     }
 
     return NextResponse.json({ success: true, user: data });
@@ -203,10 +171,11 @@ export async function PUT(request: NextRequest) {
   }
 }
 
+// DELETE - 删除用户
 export async function DELETE(request: NextRequest) {
   try {
-    const user = await getAuthUser();
-    if (!user) {
+    const currentUser = await getAuthUser();
+    if (!currentUser) {
       return NextResponse.json({ success: false, error: '未登录' }, { status: 401 });
     }
 
@@ -217,38 +186,22 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ success: false, error: '用户ID必填' }, { status: 400 });
     }
 
+    // 不允许删除自己
+    if (id === currentUser.id) {
+      return NextResponse.json({ success: false, error: '不能删除自己' }, { status: 400 });
+    }
+
     const supabase = getSupabaseAdmin();
 
-    // 获取要删除的用户信息
-    const { data: targetUser } = await supabase
-      .from('tenant_users')
-      .select('phone')
-      .eq('id', id)
-      .single();
-
-    if (!targetUser) {
-      return NextResponse.json({ success: false, error: '用户不存在' }, { status: 404 });
-    }
-
-    // 不允许删除自己
-    if (targetUser.phone === user.phone) {
-      return NextResponse.json({ success: false, error: '不能删除自己的账号' }, { status: 400 });
-    }
-
     const { error } = await supabase
-      .from('tenant_users')
+      .from('users')
       .delete()
       .eq('id', id);
 
     if (error) {
+      console.error('删除用户失败:', error);
       return NextResponse.json({ success: false, error: error.message }, { status: 500 });
     }
-
-    // 从系统用户表中移除租户关联（可选，保留用户记录）
-    await supabase
-      .from('users')
-      .update({ tenant_id: null })
-      .eq('phone', targetUser.phone);
 
     return NextResponse.json({ success: true });
   } catch (error) {
