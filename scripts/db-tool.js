@@ -9,10 +9,26 @@
 
 const https = require('https');
 
+// 优先使用 .env.local 配置，避免被系统环境变量覆盖
+const fs = require('fs');
+const path = require('path');
+
+let envConfig = {};
+const envLocalPath = path.join(__dirname, '..', '.env.local');
+if (fs.existsSync(envLocalPath)) {
+  const content = fs.readFileSync(envLocalPath, 'utf8');
+  content.split('\n').forEach(line => {
+    const [key, ...valueParts] = line.split('=');
+    if (key && valueParts.length) {
+      envConfig[key.trim()] = valueParts.join('=').trim();
+    }
+  });
+}
+
 const CONFIG = {
-  url: process.env.COZE_SUPABASE_URL || 'https://cdcnjtgabgjkouavwxsl.supabase.co',
-  anonKey: process.env.COZE_SUPABASE_ANON_KEY || '',
-  serviceKey: process.env.COZE_SUPABASE_SERVICE_ROLE_KEY || ''
+  url: envConfig.COZE_SUPABASE_URL || process.env.COZE_SUPABASE_URL || 'https://cdcnjtgabgjkouavwxsl.supabase.co',
+  anonKey: envConfig.COZE_SUPABASE_ANON_KEY || process.env.COZE_SUPABASE_ANON_KEY || '',
+  serviceKey: envConfig.COZE_SUPABASE_SERVICE_ROLE_KEY || process.env.COZE_SUPABASE_SERVICE_ROLE_KEY || ''
 };
 
 function request(method, path, body = null, useServiceKey = true) {
