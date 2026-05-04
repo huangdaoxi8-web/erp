@@ -27,7 +27,7 @@ export const healthCheck = pgTable("health_check", {
 });
 
 export const customers = pgTable("customers", {
-	id: varchar({ length: 36 }).default(sql`gen_random_uuid()`).primaryKey().notNull(),
+	id: uuid("id").primaryKey().defaultRandom(),
 	name: varchar({ length: 200 }).notNull(),
 	contactPerson: varchar("contact_person", { length: 100 }),
 	phone: varchar({ length: 20 }),
@@ -43,7 +43,7 @@ export const customers = pgTable("customers", {
 ]);
 
 export const orders = pgTable("orders", {
-	id: varchar({ length: 36 }).default(sql`gen_random_uuid()`).primaryKey().notNull(),
+	id: uuid("id").primaryKey().defaultRandom(),
 	orderNo: varchar("order_no", { length: 50 }).notNull(),
 	customerId: varchar("customer_id", { length: 36 }),
 	customerName: varchar("customer_name", { length: 200 }),
@@ -72,7 +72,7 @@ export const orders = pgTable("orders", {
 ]);
 
 export const workshops = pgTable("workshops", {
-	id: varchar({ length: 36 }).default(sql`gen_random_uuid()`).primaryKey().notNull(),
+	id: uuid("id").primaryKey().defaultRandom(),
 	name: varchar({ length: 100 }).notNull(),
 	code: varchar({ length: 20 }).notNull(),
 	location: varchar({ length: 200 }),
@@ -89,7 +89,7 @@ export const workshops = pgTable("workshops", {
 ]);
 
 export const orderItems = pgTable("order_items", {
-	id: varchar({ length: 36 }).default(sql`gen_random_uuid()`).primaryKey().notNull(),
+	id: uuid("id").primaryKey().defaultRandom(),
 	orderId: varchar("order_id", { length: 36 }).notNull(),
 	productName: varchar("product_name", { length: 200 }).notNull(),
 	specification: varchar({ length: 500 }),
@@ -120,7 +120,7 @@ export const orderItems = pgTable("order_items", {
 ]);
 
 export const tasks = pgTable("tasks", {
-	id: varchar({ length: 36 }).default(sql`gen_random_uuid()`).primaryKey().notNull(),
+	id: uuid("id").primaryKey().defaultRandom(),
 	title: varchar({ length: 200 }).notNull(),
 	orderItemId: varchar("order_item_id", { length: 36 }),
 	workshopId: varchar("workshop_id", { length: 36 }),
@@ -154,7 +154,7 @@ export const tasks = pgTable("tasks", {
 ]);
 
 export const productionProgress = pgTable("production_progress", {
-	id: varchar({ length: 36 }).default(sql`gen_random_uuid()`).primaryKey().notNull(),
+	id: uuid("id").primaryKey().defaultRandom(),
 	orderItemId: varchar("order_item_id", { length: 36 }).notNull(),
 	workshopId: varchar("workshop_id", { length: 36 }),
 	progress: integer().default(0).notNull(),
@@ -180,7 +180,7 @@ export const productionProgress = pgTable("production_progress", {
 ]);
 
 export const shipping = pgTable("shipping", {
-	id: varchar({ length: 36 }).default(sql`gen_random_uuid()`).primaryKey().notNull(),
+	id: uuid("id").primaryKey().defaultRandom(),
 	shippingNo: varchar("shipping_no", { length: 50 }).notNull(),
 	orderId: varchar("order_id", { length: 36 }),
 	customerId: varchar("customer_id", { length: 36 }),
@@ -217,7 +217,7 @@ export const shipping = pgTable("shipping", {
 ]);
 
 export const operationLogs = pgTable("operation_logs", {
-	id: varchar({ length: 36 }).default(sql`gen_random_uuid()`).primaryKey().notNull(),
+	id: uuid("id").primaryKey().defaultRandom(),
 	operatorId: varchar("operator_id", { length: 36 }),
 	action: varchar({ length: 50 }).notNull(),
 	entityType: varchar("entity_type", { length: 50 }),
@@ -234,7 +234,7 @@ export const operationLogs = pgTable("operation_logs", {
 ]);
 
 export const smsCodes = pgTable("sms_codes", {
-	id: varchar({ length: 36 }).default(sql`gen_random_uuid()`).primaryKey().notNull(),
+	id: uuid("id").primaryKey().defaultRandom(),
 	phone: varchar({ length: 20 }).notNull(),
 	code: varchar({ length: 10 }).notNull(),
 	type: varchar({ length: 20 }).default('register'),
@@ -247,7 +247,7 @@ export const smsCodes = pgTable("sms_codes", {
 ]);
 
 export const users = pgTable("users", {
-	id: varchar({ length: 36 }).default(sql`gen_random_uuid()`).primaryKey().notNull(),
+	id: uuid("id").primaryKey().defaultRandom(),
 	phone: varchar({ length: 20 }).notNull(),
 	password: varchar({ length: 255 }).notNull(),
 	nickname: varchar({ length: 100 }),
@@ -272,7 +272,7 @@ export const users = pgTable("users", {
 ]);
 
 export const userSettings = pgTable("user_settings", {
-	id: varchar({ length: 100 }).default(sql`gen_random_uuid()`).primaryKey().notNull(),
+	id: uuid("id").primaryKey().defaultRandom(),
 	userId: varchar("user_id", { length: 100 }).notNull(),
 	settingKey: varchar("setting_key", { length: 100 }).notNull(),
 	settingValue: text("setting_value"),
