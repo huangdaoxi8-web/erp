@@ -27,8 +27,9 @@ export function hasPermission(userRole: string, requiredRole: string): boolean {
 
 // 获取 Supabase 客户端
 export function getSupabaseClient(token?: string): SupabaseClient {
-  const url = process.env.COZE_SUPABASE_URL;
-  const anonKey = process.env.COZE_SUPABASE_ANON_KEY;
+  // 强制使用新的 Supabase URL
+  const url = 'https://cdcnjtgabgjkouavwxsl.supabase.co';
+  const anonKey = process.env.COZE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNkY25qdGdhYmdqa291YXZ3eHNsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc4NTIzNDEsImV4cCI6MjA5MzQyODM0MX0.HM6oAvBbY-PCDXbMpR_H4swyKprHM58mXP44u3onXEQ';
 
   if (!url || !anonKey) {
     console.error('Missing Supabase credentials:', { url: !!url, anonKey: !!anonKey });
@@ -51,8 +52,9 @@ export function getSupabaseClient(token?: string): SupabaseClient {
 
 // 获取服务角色客户端（用于管理员操作）
 export function getSupabaseServiceClient(): SupabaseClient {
-  const url = process.env.COZE_SUPABASE_URL;
-  const serviceKey = process.env.COZE_SUPABASE_SERVICE_ROLE_KEY;
+  // 强制使用新的 Supabase URL 和 Key
+  const url = 'https://cdcnjtgabgjkouavwxsl.supabase.co';
+  const serviceKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNkY25qdGdhYmdqa291YXZ3eHNsIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3Nzg1MjM0MSwiZXhwIjoyMDkzNDI4MzQxfQ.LzvwvnkQx_lIjIjsZd8FxyXRaDwTPyiVELyTEuTacmE';
 
   if (!url || !serviceKey) {
     console.error('Missing Supabase service credentials:', { url: !!url, serviceKey: !!serviceKey });
