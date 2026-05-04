@@ -54,7 +54,7 @@ export async function GET(request: NextRequest) {
     // 超级管理员从order_prefixes表获取所有前缀配置
     const { data, error } = await supabase
       .from('order_prefixes')
-      .select('prefix, company_name, phone, address')
+      .select('prefix')
       .order('created_at', { ascending: false });
     
     if (error) {
@@ -85,9 +85,6 @@ export async function GET(request: NextRequest) {
     // 如果没有用户自己的前缀设置，尝试加载order_prefixes中的第一个
     if (!settings.order_prefix && data && data.length > 0) {
       settings.order_prefix = data[0].prefix;
-      settings.company_name = data[0].company_name || '';
-      settings.company_phone = data[0].phone || '';
-      settings.company_address = data[0].address || '';
     }
     
     return NextResponse.json({ 
