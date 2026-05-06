@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Sidebar } from '@/components/sidebar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useRouter } from 'next/navigation';
 
 const pendingOrders = [
   { id: '1', dealer: '青崖客户', order: '青崖项目1-2-2004', date: '2022-10-15 14:14' },
@@ -33,29 +34,46 @@ const poolOrders = [
 ];
 
 export default function OrdersPage() {
+  const router = useRouter();
   const [dealerName, setDealerName] = useState('');
   const [orderName, setOrderName] = useState('');
-  const [orderPrefix, setOrderPrefix] = useState('QYD');
   const [generatedOrderNo, setGeneratedOrderNo] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
+  const [orderPrefix, setOrderPrefix] = useState('');
+
+  // 获取租户订单前缀
+  useEffect(() => {
+    const fetchPrefix = async () => {
+      try {
+        const response = await fetch('/api/auth/me');
+        const data = await response.json();
+        if (data.success && data.user?.tenant_id) {
+          const prefixRes = await fetch(`/api/orders/prefix?tenant_id=${data.user.tenant_id}`);
+          const prefixData = await prefixRes.json();
+          if (prefixData.success) {
+            setOrderPrefix(prefixData.prefix);
+          }
+        }
+      } catch (error) {
+        console.error('获取前缀失败:', error);
+      }
+    };
+    fetchPrefix();
+  }, []);
 
   // 生成订单号
   const generateOrderNo = async () => {
     setIsGenerating(true);
     try {
-      const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, '');
-      const response = await fetch(`/api/orders/sequence?prefix=${orderPrefix}&date=${dateStr}`);
+      const response = await fetch('/api/orders/generate', { method: 'POST' });
       const data = await response.json();
       if (data.success) {
         setGeneratedOrderNo(data.orderNo);
       } else {
-        // 如果API失败，使用本地计算
-        setGeneratedOrderNo(`${orderPrefix}${dateStr}01`);
+        alert(data.error || '生成订单号失败');
       }
     } catch {
-      // 离线模式下使用本地计算
-      const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, '');
-      setGeneratedOrderNo(`${orderPrefix}${dateStr}01`);
+      alert('生成订单号失败，请重试');
     }
     setIsGenerating(false);
   };
@@ -415,15 +433,15 @@ export default function OrdersPage() {
                     <h4 className="font-medium mb-4">录入页面</h4>
                     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                       <div className="space-y-2">
-                        <Label>订单设置（前缀）</Label>
+                        <Label>订单前缀</Label>
                         <div className="flex gap-2">
                           <Input 
                             placeholder="前缀" 
                             value={orderPrefix}
-                            onChange={(e) => setOrderPrefix(e.target.value)}
-                            className="w-24"
+                            readOnly
+                            className="w-24 bg-muted"
                           />
-                          <Button onClick={generateOrderNo} disabled={isGenerating} variant="outline">
+                          <Button onClick={generateOrderNo} disabled={isGenerating} variant="default">
                             {isGenerating ? '生成中...' : '生成订单号'}
                           </Button>
                         </div>
